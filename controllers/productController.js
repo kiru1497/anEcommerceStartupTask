@@ -1,14 +1,32 @@
-const productService = require("../services/productServices");
+const AppError = require("../utils/AppError");
 
-exports.getAllProducts = (req, res) => {
-  res.send(productService.getAllProducts());
+const getCartByUserId = (req, res, next) => {
+  const userId = req.params.userId;
+
+  if (!userId) {
+    return next(new AppError("User ID is required for cart", 400));
+  }
+
+  res.json({
+    success: true,
+    data: `Fetching cart for user with Id: ${userId}`
+  });
 };
 
-exports.addProduct = (req, res) => {
-  res.send(productService.addProduct());
+const postCartByUserId = (req, res, next) => {
+  const userId = req.params.userId;
+
+  if (!userId) {
+    return next(new AppError("User ID is required to add to cart", 400));
+  }
+
+  res.json({
+    success: true,
+    data: `Adding product to cart for user with Id: ${userId}`
+  });
 };
 
-exports.getProductById = (req, res) => {
-  const id = req.params.id;
-  res.send(productService.getProductById(id));
+module.exports = {
+  getCartByUserId,
+  postCartByUserId
 };
